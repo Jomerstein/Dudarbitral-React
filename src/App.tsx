@@ -2,7 +2,7 @@ import { Button } from "./components/ui/button"
 import Navbar from "./components/Navbar"
 
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import Login from "./auth/Login"
+import Login from "./auth/screens/Login"
 import { Home } from "lucide-react"
 
 
