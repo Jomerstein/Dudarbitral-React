@@ -3,7 +3,7 @@ import { Equipo } from "./Models/Equipo";
 import { Backend_URL } from "@/lib/Constants";
 
 export class AdminService {
-    async postEquipo(equipo: Equipo, jwtToken: string){
+    static async postEquipo(equipo: Equipo, jwtToken: string){
         try{
             const response = await axios.post(`${Backend_URL}/api/Equipos`,{
                 nombre: equipo.nombre,

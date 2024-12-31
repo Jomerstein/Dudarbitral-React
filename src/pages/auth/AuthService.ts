@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LoginUser, RegisterUser } from "./AuthModels";
+import { LoginUser, LoginUserResponse, RegisterUser } from "./AuthModels";
 import { Backend_URL } from "@/lib/Constants";
 
 
@@ -34,7 +34,7 @@ export class AuthService{
         }
 
     }
-    static async login(user: LoginUser){
+    static async login(user: LoginUser): Promise<LoginUserResponse>{
         try{
             const response = axios.post(`${Backend_URL}/api/Users/Login`,{
                 email: user.email,
@@ -42,8 +42,9 @@ export class AuthService{
             })
             if((await response).status === 200){
                 return {
-                    success: true,
-                    jwt: (await response).data
+                    isAdmin: (await response).data.isAdmin,
+                    jwt: (await response).data.token, 
+                    success: true
                 }
             }else{
                 return {
@@ -62,3 +63,4 @@ export class AuthService{
     }
 
 }
+

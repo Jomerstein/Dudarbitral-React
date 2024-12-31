@@ -1,12 +1,14 @@
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./auth/screens/Login";
+import Login from "./pages/auth/screens/Login";
 import ProfileCard from "./Profilecard";
-import AdminPanel from "./AdminPanel/Screens/AdminPanel";
+import AdminPanel from "./pages/AdminPanel/Screens/AdminPanel";
+import { AuthProvider } from "./pages/auth/AuthContext";
 
 function App() {
   return (
     <>
+      <AuthProvider>
       <BrowserRouter>
         <Navbar></Navbar>
         <Routes>
@@ -15,6 +17,7 @@ function App() {
           <Route path="/adminPanel" element={<AdminPanel />} />
         </Routes>
       </BrowserRouter>
+      </AuthProvider>
     </>
   );
 }
