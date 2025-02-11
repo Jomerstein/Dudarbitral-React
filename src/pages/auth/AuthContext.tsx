@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { AuthService } from "./AuthService";
 import { LoginUser } from "./AuthModels";
 
@@ -7,41 +7,50 @@ interface AuthContextType {
   isLoggedIn: boolean;
   isAdmin: boolean;
   login: (user: LoginUser) => Promise<boolean>;
-  logout: () => Promise<void>;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(AuthService.getIsAdmin());
+
+  const checkIsLogedIn = async () =>{
+    const token = await AuthService.checkIsLogedIn();
+    if (token) {
+      setIsLoggedIn(true);
+      setIsAdmin(AuthService.getIsAdmin());
+    }
+  } 
+
+  useEffect(() => {
+    checkIsLogedIn();
+  }, []);
 
   const login = async (user: LoginUser): Promise<boolean> => {
     try {
       
-      const data = await AuthService.login(user);
-      if(data.success === false){
-        return data.success;
-      }
-      if(data.jwt != null && data.isAdmin != null){
+      const response = await AuthService.login(user);
+      if(response.success){
         setIsLoggedIn(true);
-        setIsAdmin(data.isAdmin);
-        localStorage.setItem("jwt", data.jwt);
-        return data.success;
+        setIsAdmin(response.isAdmin);
+        return response.success;
       }
-      return data.success;
+      
+      return response.success;
     } catch (error) {
-      throw new Error("Invalid username or password");
+      throw new Error("Usuario o contraseña inválido");
     }
   
   };
 
-  const logout = async () => {
+  const logout =  () => {
  
     
       setIsLoggedIn(false);
       setIsAdmin(false);
-      localStorage.removeItem("jwt"); 
+      AuthService.logout();
     
   };
 

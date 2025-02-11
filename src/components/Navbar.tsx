@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
-  //<SoccerBall className="w-4 h-4 mr-2 text-green-500" />
+
   return (
     <nav className="w-full bg-gray-200 dark:bg-gray-900 shadow-md">
       <div className="container mx-auto px-4">
@@ -29,7 +29,6 @@ const Navbar = () => {
           </div>
           <Button
             variant="outline"
-            onClick={() => console.log(import.meta.env.VITE_BACKEND_API)}
           >
             <Link to="/login">Iniciar sesión</Link>
           </Button>
